@@ -243,9 +243,11 @@
             content.removeClass(COLORS[0]); 
             content.removeClass(COLORS[1]); 
             content.removeClass(COLORS[2]); 
+            console.log(stockInfo);
             if(stockInfo.real_price>stockInfo.yesterday_close_price) color = COLORS[0];
             else if(stockInfo.real_price<stockInfo.yesterday_close_price) color = COLORS[1];
             else color = COLORS[2]
+            console.log(stockInfo.real_price,stockInfo.yesterday_close_price,stockInfo.real_price>stockInfo.yesterday_close_price,COLORS,color)
             content.addClass(color); 
         }
 
@@ -263,33 +265,33 @@
                 'lower_id' : id.toLowerCase(),
                 'upper_id' : id.toUpperCase(),
                 'name' : seg2[0],
-                'real_price' : seg2[1],
-                'real_price_change_rate' : seg2[2],
+                'real_price' : parseFloat(seg2[1]),
+                'real_price_change_rate' : parseFloat(seg2[2]),
                 'real_time' : seg2[3],
-                'real_price_change_amount' : seg2[4],
-                'start_price' : seg2[5],
-                'highprice_today' : seg2[6],
-                'lowerprice_today' : seg2[7],
-                'highprice_52week' : seg2[8],
-                'lowerprice_52week' : seg2[9],
-                'real_share_amount' : seg2[10],
-                'stock_amount_10day' : seg2[11],
-                'market_cap' : seg2[12],
-                'earning_per_share' : seg2[13],
+                'real_price_change_amount' : parseFloat(seg2[4]),
+                'start_price' : parseFloat(seg2[5]),
+                'highprice_today' : parseFloat(seg2[6]),
+                'lowerprice_today' : parseFloat(seg2[7]),
+                'highprice_52week' : parseFloat(seg2[8]),
+                'lowerprice_52week' : parseFloat(seg2[9]),
+                'real_share_amount' : parseInt(seg2[10]),
+                'stock_amount_10day' : parseInt(seg2[11]),
+                'market_cap' : parseFloat(seg2[12]),
+                'earning_per_share' : parseFloat(seg2[13]),
                 'PE' : seg2[14],
                 't1' : seg2[15],
                 't2' : seg2[16],
                 't3' : seg2[17],
                 't4' : seg2[18],
-                'capitalization' : seg2[19],
+                'capitalization' : parseFloat(seg2[19]),
                 't5' : seg2[20],
-                'after_hour_price' : seg2[21],
-                'after_hour_price_change_rate' : seg2[22],
-                'after_hour_price_change_amount' : seg2[23],
+                'after_hour_price' : parseFloat(seg2[21]),
+                'after_hour_price_change_rate' : parseFloat(seg2[22]),
+                'after_hour_price_change_amount' : parseInt(seg2[23]),
                 'close_time' : seg2[24],
                 'after_hour_time' : seg2[25],
-                'yesterday_close_price' : seg2[26],
-                'after_hour_share_amount' : seg2[27]
+                'yesterday_close_price' : parseFloat(seg2[26]),
+                'after_hour_share_amount' : parseInt(seg2[27])
             };
         }
 
@@ -300,7 +302,7 @@
                 "<div class='portlet-title' data-id='"+id+"'>" +
                 "<div class='caption'>" +
                 "<i class='fa fa-reorder'></i><span class='stockname'></span>&nbsp&nbsp " +
-                "<small class='desc'></small></div>" +
+                "<small class='stockdata'></small></div>" +
 
                 "<div class='tools'> <a href='' class='expand portletarrow'></a> <a href='' class='remove'></a> </div> </div>" +
                 "<div class='portlet-body'> <div class='portlet'> <div class='row'> <div class='stock_flash_div'>" +
@@ -452,10 +454,12 @@
             }
             if (y > sideTop) {
                 $('#sidebar').css({
-                    top: (y - sideTop) + 'px'
+                    position: 'fixed',
+                    top: '45px'
                 });
             } else {
                 $('#sidebar').css({
+                    position: 'absolute',
                     top: 0
                 });
             }
@@ -628,7 +632,7 @@
                     // 股票详情板块
                     //console.log(formateAmount(stockInfo.start_price));
                     content = stockInfo.real_price+'&nbsp&nbsp'+stockInfo.real_price_change_amount+'&nbsp&nbsp('+stockInfo.real_price_change_rate+'%)';
-                    $("#stock_content_"+id+" small.desc").html(content);
+                    $("#stock_content_"+id+" small.stockdata").html(content);
                     $("#stock_content_"+id+" span.stockname").html(stockInfo.name);
                     freshStockColor($("#stock_content_"+id+" .stockportlet"),stockInfo);
                     $("#stock_content_"+id+" .detail_market_cap").html(formateAmount(stockInfo.market_cap));
