@@ -82,6 +82,7 @@
       <?php if(!empty($this->userid)&&$this->visitorrid==Yii::app()->params['rid']['visitor']) {?>
       <a class='r1_button r1_gray r1_medium pull-right' href='/main/user/login?url=<?php echo htmlspecialchars($this->requesturl);?>&amp;isreg=1'>注册</a>
       <a class='r1_button r1_gray r1_medium pull-right' href='/main/user/login?url=<?php echo htmlspecialchars($this->requesturl);?>'>登录</a>
+      <span class='pull-right' style='color:white;margin-right:20px' id='nowtime'></span>
       <?php }?>
       <!-- END TOP NAVIGATION MENU -->
   </div>
@@ -157,13 +158,13 @@
   <!-- END CORE PLUGINS -->
 
   <!-- BEGIN PAGE LEVEL PLUGINS -->
+  <script src="/js/mtime.js" type="text/javascript"></script>
 
 
   <!-- END PAGE LEVEL PLUGINS -->
 
   <!-- BEGIN PAGE LEVEL SCRIPTS -->
   <script src="/assets/scripts/app.js" type="text/javascript"></script>
-
   <!-- END PAGE LEVEL SCRIPTS -->  
   <script>
     jQuery(document).ready(function() {    
@@ -180,7 +181,12 @@
        Index.initIntro();
        Tasks.initDashboardWidget();
        */
-    });
+       function setStockTime() {
+         s='美东时间 '+getStockTime();
+         $("#nowtime").text(s);
+       }
+       setInterval(setStockTime,1000);
+     });
   </script>
   <!-- END JAVASCRIPTS -->
 </body>

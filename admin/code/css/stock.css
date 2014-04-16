@@ -158,3 +158,6 @@ body {
 .hq_details table { width:100%;line-height:24px;}
 .hq_details thead th { text-align:left;color:#969696;}
 .hq_details tbody td { text-align:left;font-weight:bold;color:#07237a;}
+
+.after_hour_info {font-weight: bold;font-size:120%;display:none;}
+.after_hour_head { font-weight:bold;text-align:left;color:#969696;}

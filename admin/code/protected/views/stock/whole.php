@@ -27,7 +27,7 @@
 	<div class="portlet-title" data-id="<?php echo htmlspecialchars($id);?>">
 		<div class="caption">
             <i class="fa fa-reorder"></i>
-            <span class="stockname"><?php echo htmlspecialchars($v['name']);?></span>&nbsp&nbsp
+            <span class="stockname"><?php echo htmlspecialchars($v['name']);?>(<?php echo htmlspecialchars(($id));?>)</span>&nbsp&nbsp
             <small class='stockdata'><?php echo htmlspecialchars($v['real_price'])."&nbsp&nbsp".htmlspecialchars($v['real_price_change_amount'])."&nbsp&nbsp(".htmlspecialchars($v['real_price_change_rate'])."%)";?> </small>
         </div>
 		<div class="tools">
@@ -54,6 +54,10 @@
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab_5_1">
                         <div class="hq_details" id="hqDetails">
+                            <div class='after_hour_info'>
+                                <span class='after_hour_head'> 盘后 </span>
+                                <span class='after_hour_content'></span>
+                            </div>
                             <table  border="0" cellpadding="0" cellspacing="0">
                                 <thead>
                                     <tr>
@@ -243,11 +247,10 @@
             content.removeClass(COLORS[0]); 
             content.removeClass(COLORS[1]); 
             content.removeClass(COLORS[2]); 
-            console.log(stockInfo);
             if(stockInfo.real_price>stockInfo.yesterday_close_price) color = COLORS[0];
             else if(stockInfo.real_price<stockInfo.yesterday_close_price) color = COLORS[1];
             else color = COLORS[2]
-            console.log(stockInfo.real_price,stockInfo.yesterday_close_price,stockInfo.real_price>stockInfo.yesterday_close_price,COLORS,color)
+            //console.log(stockInfo.real_price,stockInfo.yesterday_close_price,stockInfo.real_price>stockInfo.yesterday_close_price,COLORS,color)
             content.addClass(color); 
         }
 
@@ -297,6 +300,7 @@
 
         // 空股票详情板块
         function getEmptySockDetailPanel(id) {
+            afterhour = "<div class='after_hour_info'><span class='after_hour_head'> 盘后 </span><span class='after_hour_content'></span></div>";
             content = "<div class='row' id='stock_content_"+id+"'> <div class='col-md-12'> " +
                 "<div class='portlet box stockportlet "+COLORS[2]+"'>" +
                 "<div class='portlet-title' data-id='"+id+"'>" +
@@ -313,6 +317,7 @@
                 "<div class='tab-content'> " +
                         "<div class='tab-pane active' id='tab_5_1'>" +
                         "<div class='hq_details' id='hqDetails'>"+
+                            afterhour +
                             "<table  border='0' cellpadding='0' cellspacing='0'>"+
                                 "<thead> <tr> <th colspan='4' class='b_right'>详细行情</th> </tr></thead>" +
                                 "<tbody>" +
@@ -485,12 +490,13 @@
         // 增加新股票
         function addStockPanel() {
             var fa = $("#sidebar .add_group_elem_div");
-            var stock = fa.find("input").val();
+            var stock = fa.find("input").val().toLowerCase();
             var stockcode = "gb_"+stock;
             has = true;
             jsonp("http://hq.sinajs.cn/?list="+stockcode, function(){
                 // 检测是否存在
                 stockInfo = splitSinaStockInfo(stock);
+                console.log(stock,stockInfo);
                 if(!stockInfo) has=false;
                 if(!has) {
                     return;
@@ -604,6 +610,10 @@
         });
 
 
+        // 盘前价格
+        if(isOpen()) $(".after_hour_info").css('display','none');
+        else $(".after_hour_info").css('display','');
+
         // ------------------------------------定时器---------------------------------
         // 获取股票信息并更新页面
         stockinfo_lock = false;
@@ -630,10 +640,13 @@
                     freshStockColor($(this),stockInfo);
 
                     // 股票详情板块
+                    $("#stock_content_"+id+" .after_hour_content").html(formateAmount(stockInfo.after_hour_price)+'&nbsp&nbsp('+formateAmount(stockInfo.after_hour_price_change_rate)+'%)');
+                    if(stockInfo.after_hour_price_change_amount>0) $("#stock_content_"+id+" .after_hour_content").css('color','red')
+                    if(stockInfo.after_hour_price_change_amount<0) $("#stock_content_"+id+" .after_hour_content").css('color','green')
                     //console.log(formateAmount(stockInfo.start_price));
                     content = stockInfo.real_price+'&nbsp&nbsp'+stockInfo.real_price_change_amount+'&nbsp&nbsp('+stockInfo.real_price_change_rate+'%)';
                     $("#stock_content_"+id+" small.stockdata").html(content);
-                    $("#stock_content_"+id+" span.stockname").html(stockInfo.name);
+                    $("#stock_content_"+id+" span.stockname").html(stockInfo.name+"("+id+")");
                     freshStockColor($("#stock_content_"+id+" .stockportlet"),stockInfo);
                     $("#stock_content_"+id+" .detail_market_cap").html(formateAmount(stockInfo.market_cap));
                     $("#stock_content_"+id+" .detail_price_interval").html(formateAmount(stockInfo.lowerprice_today)+"-"+formateAmount(stockInfo.highprice_today));
