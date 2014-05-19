@@ -67,7 +67,7 @@ return array(
             ),
 			'db_frame'=>array(
 				'class'=>'CDbConnection',
-                'connectionString' => 'mysql:host=127.0.0.1;dbname=stock',
+                'connectionString' => 'mysql:host=127.0.0.1;dbname=stockweb',
                 'emulatePrepare' => true,
                 'username' => 'stock',
                 'password' => '9d7jds!9afl!8$gs',

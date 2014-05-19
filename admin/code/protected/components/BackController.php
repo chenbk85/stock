@@ -9,6 +9,7 @@ class BackController extends Controller
 				
     public $layout = 'application.modules.main.views.layouts.metronic';//"application.modules.main.views.layouts.frame_without_leftnav";
 
+    public $islogin=0;
     public $userid=0;
     public $visitorrid=0;
 	public $userInfo = array();
@@ -72,17 +73,14 @@ class BackController extends Controller
             $this->userInfo = $userInfo;      
         }
 
+        $this->islogin = $userInfo['uid'] != Yii::app()->params['visitor_id'];
         $this->visitorrid = $userInfo['rid'];
         $this->userid = $userInfo['uid'];
         $this->userInfo = $userInfo;   
         $this->requesturl=$_SERVER['REQUEST_URI'];
-        //var_dump($this->visitorid);exit;
 
         // 权限限制
-        if($userInfo['uname']=='superman'&&!Privilege::hasPrivilege($userInfo['uid'],$requestUrl)
-            && $requestUrl!='/site/index'
-            && $requestUrl!='/main/user/lock'
-            )
+        if(!Privilege::hasPrivilege($userInfo['uid'],$requestUrl))
         {
             return false;
         }

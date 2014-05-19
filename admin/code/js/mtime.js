@@ -23,8 +23,9 @@ function getStockMinute() {
 }
 
 function isOpen() {
-	hour = getStockHour();
-	minutes = getStockMinute();
+	var dd1=new Date(); 
+	hour = dd1.getHours();
+	minutes = dd1.getMinutes();
 	// 夏令时
 	if((hour==21&&minutes>=30)||(hour==4&&minutes<30)||(hour>21||hour<4)) return true;
 	else return false;

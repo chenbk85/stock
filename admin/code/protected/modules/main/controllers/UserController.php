@@ -163,7 +163,7 @@ class UserController extends BackController
             }
             else 
             {
-                $this->render('login_soft', array('error'=>1,'url'=>$url));
+                $this->render('login_soft', array('showregister' => $showregister,'error'=>1,'url'=>$url));
                 exit;
             }
         }

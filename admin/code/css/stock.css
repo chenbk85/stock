@@ -13,14 +13,27 @@ body {
 	font:12px/20px 'Microsoft Yahei','微软雅黑','Simsun','宋体';
 }
 
+.mpage_container {
+	background-color: white;
+}
+
 /*框架*/
 .stock_body_center {
 	margin:0 auto ! important;
 	width:1263px;
 }
 
-
-
+.stocktimer {
+	color:white;
+	margin-right:20px;
+	margin-top:7px;
+	padding:2px;
+	border: 2px solid grey;
+}
+.login_button, .signup_button {
+	margin-top:7px;
+	margin-right:7px;
+}
 
 /*-----------自选股---------------*/
 
@@ -144,7 +157,7 @@ body {
 	height: 470px;
 	position: relative;
 	min-height: 1px;
-	padding-right: 30px;
+	padding-right: 10px;
 	padding-left: 15px;
 }
 .stock_detail_div .tabbable-custom .tab-content {

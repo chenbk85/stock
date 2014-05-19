@@ -1,4 +1,4 @@
-<div class='row'>
+<div class='row' style="display:none;">
 <div class="col-md-12">
 <form class="form-inline stocksearch" role="form" action="/stock/whole" method="post">
 	<div class="form-group ">
@@ -39,12 +39,45 @@
         <div class="portlet">
         <div class='row'> 
             <div class="stock_flash_div">
+            <!--[if !IE]><!-->
             <object type="application/x-shockwave-flash" data="http://i1.sinaimg.cn/cj/yw/flash/us0106wsa.swf" class="stock_flash"  >
                 <param name="allowFullScreen" value="true">
                 <param name="allowScriptAccess" value="always"><param name="wmode" value="transparent">
                 <param name="freq" value="30">
-                <param name="flashvars" value="symbol=usr_<?php echo htmlspecialchars($id);?>&amp;lastfive=50000">
+                <param name="flashvars" value="symbol=gb_<?php echo htmlspecialchars($id);?>&amp;lastfive=50000">
             </object>
+            <!--<![endif]-->
+            <!--[if IE]>
+            <OBJECT style="VISIBILITY: visible" id=hqFlash classid=clsid:D27CDB6E-AE6D-11cf-96B8-444553540000 width=635 height=470>
+            <PARAM NAME="_cx" VALUE="16801">
+            <PARAM NAME="_cy" VALUE="12435">
+            <PARAM NAME="FlashVars" VALUE="symbol=gb_ebr&amp;lastfive=50000">
+            <PARAM NAME="Movie" VALUE="http://i2.sinaimg.cn/cj/yw/flash/us0404k.swf">
+            <PARAM NAME="Src" VALUE="http://i2.sinaimg.cn/cj/yw/flash/us0404k.swf">
+            <PARAM NAME="WMode" VALUE="Transparent">
+            <PARAM NAME="Play" VALUE="0">
+            <PARAM NAME="Loop" VALUE="-1">
+            <PARAM NAME="Quality" VALUE="High">
+            <PARAM NAME="SAlign" VALUE="">
+            <PARAM NAME="Menu" VALUE="-1">
+            <PARAM NAME="Base" VALUE="">
+            <PARAM NAME="AllowScriptAccess" VALUE="always">
+            <PARAM NAME="Scale" VALUE="ShowAll">
+            <PARAM NAME="DeviceFont" VALUE="0">
+            <PARAM NAME="EmbedMovie" VALUE="0">
+            <PARAM NAME="BGColor" VALUE="">
+            <PARAM NAME="SWRemote" VALUE="">
+            <PARAM NAME="MovieData" VALUE="">
+            <PARAM NAME="SeamlessTabbing" VALUE="1">
+            <PARAM NAME="Profile" VALUE="0">
+            <PARAM NAME="ProfileAddress" VALUE="">
+            <PARAM NAME="ProfilePort" VALUE="0">
+            <PARAM NAME="AllowNetworking" VALUE="all">
+            <PARAM NAME="AllowFullScreen" VALUE="true">
+            <PARAM NAME="AllowFullScreenInteractive" VALUE="false">
+            <PARAM NAME="IsDependent" VALUE="0">
+            </OBJECT>
+            <![endif]-->
             </div> 
             <div class="stock_detail_div">
                 <div class="tabbable-custom ">
@@ -213,26 +246,40 @@
         function saveUserQueryCookie() {
             val = $(".stockinput").val();
             $.cookie("stock_user_query",val,{ expires: 365 });
+            if(IS_LOGIN) {
+                $.post("/stock/savechoosestocks", { ids: val } );
+            }
         }
         // 访问sina接口
         function jsonp(src, cb) {
+            $.ajaxSetup({
+                cache: true
+            });
+            $.getScript(src,cb);
+            $.ajaxSetup({
+                cache: false
+            });
+            /*
             var script = document.createElement('script'),
                 s = document.getElementsByTagName("head")[0];
 
             script.onreadystatechange = script.onload = function () {
                 if (!script.readyState || /loaded|complete/i.test(script.readyState)) {
                     script.onreadystatechange = script.onload = null;
-                    script.parentNode.removeChild(script);
+                    //script.parentNode.removeChild(script);
 
                     cb();
                 }
             };
 
             script.type = 'text/javascript';
-            script.class = 'nouse';
+            //alert(script)
+            script.className = 'nouse';
             s.appendChild(script);
             script.src = src;
+            */
         }
+
 
         // 格式化数字为万，亿单位
         function formateAmount(str) {
@@ -290,7 +337,7 @@
                 't5' : seg2[20],
                 'after_hour_price' : parseFloat(seg2[21]),
                 'after_hour_price_change_rate' : parseFloat(seg2[22]),
-                'after_hour_price_change_amount' : parseInt(seg2[23]),
+                'after_hour_price_change_amount' : parseFloat(seg2[23]),
                 'close_time' : seg2[24],
                 'after_hour_time' : seg2[25],
                 'yesterday_close_price' : parseFloat(seg2[26]),
@@ -368,6 +415,8 @@
         var COLORS = ['<?php echo Yii::app()->params["colors"][0]?>','<?php echo Yii::app()->params["colors"][1]?>','<?php echo Yii::app()->params["colors"][2]?>']; // up down nochange
         var DEFAULT_STOCKBLOCK = $("#sidebar #sortable ul").html();
         var DEFAULT_STOCKPAN = $("#stock_pan").html();
+
+        var IS_LOGIN = '<?php echo htmlspecialchars($this->islogin);?>'
 
 
 
@@ -496,7 +545,7 @@
             jsonp("http://hq.sinajs.cn/?list="+stockcode, function(){
                 // 检测是否存在
                 stockInfo = splitSinaStockInfo(stock);
-                console.log(stock,stockInfo);
+                //console.log(stock,stockInfo);
                 if(!stockInfo) has=false;
                 if(!has) {
                     return;
@@ -543,6 +592,8 @@
             $("#stock_content_"+id).remove();
             $(this).closest("li").remove();
             idsInputRemoveOne(id);
+            // 修正cookie
+            saveUserQueryCookie();
         });
         $("#stock_pan").delegate(".remove","click",function(event) {
             event.stopPropagation();
@@ -551,6 +602,8 @@
             $("#stock_content_"+id).remove();
             $("#sidebar li.sidebar_stock_block[data-id="+id+"]").remove();
             idsInputRemoveOne(id);
+            // 修正cookie
+            saveUserQueryCookie();
         });
 
         // 点击右侧栏股票单个
@@ -562,7 +615,7 @@
 
         // 排序
         $("#sidebar").delegate(".sort_btn","click",function() {
-            event.preventDefault();
+            //event.preventDefault();
             sort = $(this).data("sort");       
 
             stockarray = [];
@@ -610,14 +663,17 @@
         });
 
 
-        // 盘前价格
-        if(isOpen()) $(".after_hour_info").css('display','none');
-        else $(".after_hour_info").css('display','');
+
 
         // ------------------------------------定时器---------------------------------
         // 获取股票信息并更新页面
         stockinfo_lock = false;
         function getStockInfo() {
+            //return 
+            // 盘前价格
+            if(isOpen()) $(".after_hour_info").css('display','none');
+            else $(".after_hour_info").css('display','block');
+            
             if(stockinfo_lock) return;
             stockinfo_lock=true;
             getparams = '';
@@ -640,9 +696,9 @@
                     freshStockColor($(this),stockInfo);
 
                     // 股票详情板块
-                    $("#stock_content_"+id+" .after_hour_content").html(formateAmount(stockInfo.after_hour_price)+'&nbsp&nbsp('+formateAmount(stockInfo.after_hour_price_change_rate)+'%)');
-                    if(stockInfo.after_hour_price_change_amount>0) $("#stock_content_"+id+" .after_hour_content").css('color','red')
-                    if(stockInfo.after_hour_price_change_amount<0) $("#stock_content_"+id+" .after_hour_content").css('color','green')
+                    $("#stock_content_"+id+" .after_hour_content").html(formateAmount(stockInfo.after_hour_price)+'&nbsp&nbsp'+stockInfo.after_hour_price_change_amount+'&nbsp&nbsp('+formateAmount(stockInfo.after_hour_price_change_rate)+'%)');
+                    if(stockInfo.after_hour_price_change_rate>0) $("#stock_content_"+id+" .after_hour_content").css('color','red')
+                    if(stockInfo.after_hour_price_change_rate<0) $("#stock_content_"+id+" .after_hour_content").css('color','green')
                     //console.log(formateAmount(stockInfo.start_price));
                     content = stockInfo.real_price+'&nbsp&nbsp'+stockInfo.real_price_change_amount+'&nbsp&nbsp('+stockInfo.real_price_change_rate+'%)';
                     $("#stock_content_"+id+" small.stockdata").html(content);
