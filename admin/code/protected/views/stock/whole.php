@@ -10,7 +10,7 @@
 </form>						
 </div>
 </div>
-<hr>
+<br>
 
 
 
@@ -19,8 +19,10 @@
 <div class="col-md-12">
 <div class='row'>
 <!--BEGIN LEFT CONENT-->
+<div class="col-md-12">
 <div id="stock_pan">
-<?php foreach($price_details as $id=>$v) {?>
+<?php foreach($price_details as $cate=>$tmp) {?>
+<?php foreach($tmp as $id=>$v) {?>
 <!--BEGIN ONE STOCK-->
 <div class='row' id='stock_content_<?php echo htmlspecialchars($id);?>'> <div class="col-md-12">
 <div class="portlet box stockportlet <?php if($v['real_price_change_amount']<0) echo Yii::app()->params['colors'][1]; elseif($v['real_price_change_amount']==0) echo Yii::app()->params['colors'][2]; else echo Yii::app()->params['colors'][0];?>">
@@ -32,26 +34,29 @@
         </div>
 		<div class="tools">
 			<a href="" class="expand portletarrow"></a>
+            <?php if($cate=='self') { ?>
 			<a href="" class="remove"></a>
+            <?php }?>
 		</div>
+        <small style="clear:both;"></small>
 	</div>
 	<div class="portlet-body">
         <div class="portlet">
-        <div class='row'> 
+        <div class='row stock_pan_row'> 
             <div class="stock_flash_div">
             <!--[if !IE]><!-->
             <object type="application/x-shockwave-flash" data="http://i1.sinaimg.cn/cj/yw/flash/us0106wsa.swf" class="stock_flash"  >
                 <param name="allowFullScreen" value="true">
                 <param name="allowScriptAccess" value="always"><param name="wmode" value="transparent">
                 <param name="freq" value="30">
-                <param name="flashvars" value="symbol=gb_<?php echo htmlspecialchars($id);?>&amp;lastfive=50000">
+                <param name="flashvars" value="symbol=<?php echo htmlspecialchars($v['panel_id']);?>&amp;lastfive=50000">
             </object>
             <!--<![endif]-->
             <!--[if IE]>
             <OBJECT style="VISIBILITY: visible" id=hqFlash classid=clsid:D27CDB6E-AE6D-11cf-96B8-444553540000 width=635 height=470>
             <PARAM NAME="_cx" VALUE="16801">
             <PARAM NAME="_cy" VALUE="12435">
-            <PARAM NAME="FlashVars" VALUE="symbol=gb_ebr&amp;lastfive=50000">
+            <PARAM NAME="FlashVars" VALUE="symbol=gb_<?php echo htmlspecialchars($v['panel_id']);?>&amp;lastfive=50000">
             <PARAM NAME="Movie" VALUE="http://i2.sinaimg.cn/cj/yw/flash/us0404k.swf">
             <PARAM NAME="Src" VALUE="http://i2.sinaimg.cn/cj/yw/flash/us0404k.swf">
             <PARAM NAME="WMode" VALUE="Transparent">
@@ -82,10 +87,12 @@
             <div class="stock_detail_div">
                 <div class="tabbable-custom ">
                     <ul class="nav nav-tabs ">
-                        <li class="active"><a href="#tab_5_1" data-toggle="tab">实时行情</a></li>
+                        <li class="active"><a href="#stock_pan_info_real_detail" data-toggle="tab">实时行情</a></li>
+                        <li class=""><a href="#stock_pan_info_news" data-toggle="tab">新闻</a></li>
                     </ul>
+                    <small style="clear:both;"></small>
                     <div class="tab-content">
-                        <div class="tab-pane active" id="tab_5_1">
+                        <div class="tab-pane active" id="stock_pan_info_real_detail">
                         <div class="hq_details" id="hqDetails">
                             <div class='after_hour_info'>
                                 <span class='after_hour_head'> 盘后 </span>
@@ -151,6 +158,7 @@
                     </div>
                 </div>
             </div>
+            <small style="clear:both"></small>
         </div>
 
         </div>
@@ -159,6 +167,8 @@
 </div> </div>
 <!--END ONE STOCK-->
 <?php } ?>
+<?php } ?>
+</div>
 </div>
 <!--END LEFT CONENT-->
 
@@ -170,74 +180,114 @@
 </div>
 </div> 
 
-<div id="sidebar">
-<div id="sidebar_portlet" class=" portlet box grey">
-    <div class="portlet-title">
-        <div class="caption"><i class="fa fa-reorder"></i>选股组合</div>
-        <div class="actions">
-            <!--
-            <div class="btn-group">
-                <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
-                Small button <i class="fa fa-angle-down"></i>
-                </button>
-                <ul class="dropdown-menu" role="menu">
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Another action</a></li>
-                    <li><a href="#">Something else here</a></li>
-                    <li class="divider"></li>
-                    <li><a href="#">Separated link</a></li>
-                </ul>
-            </div>
-        -->
-        </div>
-    </div>
-    <div class="portlet-body" >
-        <!--add elem to stock group-->
-        <!--<div id="sidebar_addstock_button" class="btn btn-block blue">
-            <span class=""><i class="fa fa-plus"></i></span>
-        </div>
-        -->
-        <div  class='sidebar_addstock_input input-group add_group_elem_div'> 
-            <input id="suggestInputSearch" value='' type='text' class='form-control' placeholder='拼音/代码/名称'>
-            <span class='input-group-btn'>
-            <button class='btn blue groupadd_confirm' type='button'>增加</button>
-            </span> 
-        </div>
-        <div>
-            <!--sort: no up down-->
-            <button style="" class='btn blue sort_btn' data-sort="no" type='button'><i class="iconfont sort_btn_img_left">&#983407;</i><i class="iconfont sort_btn_img_right">&#983408;</i></button>
-        </div>
-        <div class="scroller sidebar_scoller"  data-rail-visible="1" data-rail-color="yellow" data-handle-color="#a1b2bd">
-            <ul id="sortable" style="padding:2px">
-                <?php foreach($price_details as $id=>$v) {?>
-                <li data-id="<?php echo htmlspecialchars($id)?>" class="sidebar_stock_block btn btn-block <?php if($v['real_price_change_amount']<0) echo Yii::app()->params['colors'][1]; elseif($v['real_price_change_amount']==0) echo Yii::app()->params['colors'][2]; else echo Yii::app()->params['colors'][0];?>">
-                    <span class="stockname"><?php echo htmlspecialchars($v['name']);?></span>
-                    <small class="stockprice"><?php echo htmlspecialchars($v['real_price']);?></small>
-                    <small class="stockrate"><?php echo "(".htmlspecialchars($v['real_price_change_rate'])."%)"?></small>
-                    <i class="stock_block_remove iconfont">&#983219;</i>
-                    <small class="clearfix"></small>
-                </li>
-                <?php } ?>
-            </ul>
-        </div>
-    </div>
-</div>
-<!--BEGIN CONTROL PANEL-->
-<?php if(!empty($price_details)) {?>
-<div >
-    <button id="open_all_stock_panel" class="btn btn-default blue ">全部展开</button>
-    <button id="close_all_stock_panel" class="btn btn-default blue ">全部关闭</button>
-    <button id="page_go_top" type="button" class="btn btn-default blue"><i class="iconfont">&#983315;</i></button>
 
-</div>
-<?php }?>
-<!--END CONTROL PANEL-->
-</div> 
+
 </div>
 <!--END MAIN CONENT-->
 
-<script src="http://vip.stock.finance.sina.com.cn/usstock/fusioncharts/Code/FusionCharts/FusionCharts.js" type="text/javascript"></script>   
+
+<!--悬浮和隐藏模块-->
+
+<!--侧边栏-->
+<div id="sidebar">
+    <div id="sidebar_portlet" class=" portlet box color_frame">
+        <div class="portlet-title">
+            <div class="caption"><i class="fa fa-reorder"></i>选股组合</div>
+            <div class="actions">
+                <a href='/stock/selfStockDetail' id="stock_detail_table" class="btn btn-sm color_btn_nomal" type="button">详</a>
+            <!--
+                <div class="btn-group">
+                    <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+                    Small button <i class="fa fa-angle-down"></i>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">Action</a></li>
+                        <li><a href="#">Another action</a></li>
+                        <li><a href="#">Something else here</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">Separated link</a></li>
+                    </ul>
+                </div>
+                -->
+            </div>
+            <small style="clear:both;"></small>
+        </div>
+        <div class="portlet-body" >
+            <!--add elem to stock group-->
+            <!--<div id="sidebar_addstock_button" class="btn btn-block blue">
+                <span class=""><i class="fa fa-plus"></i></span>
+            </div>
+            -->
+            <div class="scroller"  data-rail-visible="1" data-rail-color="yellow" data-handle-color="#a1b2bd">
+                <ul id="market_sortable" style="padding:2px">
+                    <?php foreach($price_details['market'] as $id=>$v) {?>
+                    <li data-id="<?php echo htmlspecialchars($id)?>" class="sidebar_stock_block btn <?php if($v['real_price_change_amount']<0) echo Yii::app()->params['colors'][1]; elseif($v['real_price_change_amount']==0) echo Yii::app()->params['colors'][2]; else echo Yii::app()->params['colors'][0];?>">
+                        <span class="stockname"><?php echo htmlspecialchars($v['name']);?></span>
+                        <small class="stockprice" style="width:52px;"><?php echo htmlspecialchars($v['real_price']);?></small>
+                        <small class="stockrate"><?php echo "(".htmlspecialchars($v['real_price_change_rate'])."%)"?></small>
+                        <!--<i class="stock_block_remove iconfont">&#983219;</i>-->
+                        <small class="clearfix"></small>
+                    </li>
+                    <?php } ?>
+                </ul>
+            </div>
+            <div  class='sidebar_addstock_input input-group add_group_elem_div'> 
+                <input id="suggestInputSearch" value='' type='text' class='form-control' placeholder='拼音/代码/名称'>
+                <span class='input-group-btn'>
+                <button class='btn color_btn_nomal groupadd_confirm' type='button'>增加</button>
+                </span> 
+            </div>
+            <div>
+                <!--sort: no up down-->
+                <button style="" class='btn color_btn_nomal sort_btn' data-sort="no" type='button'><i class="iconfont sort_btn_img_left">&#983407;</i><i class="iconfont sort_btn_img_right">&#983408;</i></button>
+            </div>
+            <div class="scroller sidebar_scoller"  data-rail-visible="1" data-rail-color="yellow" data-handle-color="#a1b2bd">
+                <ul id="sortable" style="padding:2px">
+                    <?php foreach($price_details['self'] as $id=>$v) {?>
+                    <li data-id="<?php echo htmlspecialchars($id)?>" class="sidebar_stock_block btn <?php if($v['real_price_change_amount']<0) echo Yii::app()->params['colors'][1]; elseif($v['real_price_change_amount']==0) echo Yii::app()->params['colors'][2]; else echo Yii::app()->params['colors'][0];?>">
+                        <span class="stockname"><?php echo htmlspecialchars($v['name']);?></span>
+                        <small class="stockprice"><?php echo htmlspecialchars($v['real_price']);?></small>
+                        <small class="stockrate"><?php echo "(".htmlspecialchars($v['real_price_change_rate'])."%)"?></small>
+                        <i class="stock_block_remove iconfont">&#983219;</i>
+                        <small class="clearfix"></small>
+                    </li>
+                    <?php } ?>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--BEGIN CONTROL PANEL-->
+    <?php if(!empty($price_details)) {?>
+    <div >
+    <!--
+        <button id="open_all_stock_panel" class="btn btn-default blue ">全部展开</button>
+        <button id="close_all_stock_panel" class="btn btn-default blue ">全部关闭</button>
+        -->
+        <button id="page_go_top" type="button" class="btn color_btn_nomal "><i class="iconfont">&#983315;</i></button>
+
+    </div>
+    <?php }?>
+    <!--END CONTROL PANEL-->
+</div> 
+
+<!--弹窗自选股详情模块-->
+<div style='display:none'>
+    <div id='stocks_detail_list' style='padding:10px; background:#fff;'>
+    <p><strong>This content comes from a hidden element on this page.</strong></p>
+    <p>The inline option preserves bound JavaScript events and changes, and it puts the content back where it came from when it is closed.</p>
+    <p><a id="click" href="#" style='padding:5px; background:#ccc;'>Click me, it will be preserved!</a></p>
+    
+    <p><strong>If you try to open a new Colorbox while it is already open, it will update itself with the new content.</strong></p>
+    <p>Updating Content Example:<br />
+    <a class="ajax" href="../content/ajax.html">Click here to load new content</a></p>
+    </div>
+</div>
+
+<!--<script src="http://vip.stock.finance.sina.com.cn/usstock/fusioncharts/Code/FusionCharts/FusionCharts.js" type="text/javascript"></script>-->   
 <script type="text/javascript" src="/js/suggestFromSina.js"></script>
+<script type="text/javascript" src="/js/remoteApi.js" ></script>
+<link href="/colorbox/colorbox.css" rel="stylesheet" media="screen" type="text/css" />
+<script type="text/javascript" src="/colorbox/jquery.colorbox.js" ></script>
 <script type="text/javascript"> 
 
     jQuery(document).ready(function() {    
@@ -245,39 +295,12 @@
         // 股票查询串cookie
         function saveUserQueryCookie() {
             val = $(".stockinput").val();
+            //console.log("befor:"+val);
             $.cookie("stock_user_query",val,{ expires: 365 });
+            //console.log("after:"+val);
             if(IS_LOGIN) {
                 $.post("/stock/savechoosestocks", { ids: val } );
             }
-        }
-        // 访问sina接口
-        function jsonp(src, cb) {
-            $.ajaxSetup({
-                cache: true
-            });
-            $.getScript(src,cb);
-            $.ajaxSetup({
-                cache: false
-            });
-            /*
-            var script = document.createElement('script'),
-                s = document.getElementsByTagName("head")[0];
-
-            script.onreadystatechange = script.onload = function () {
-                if (!script.readyState || /loaded|complete/i.test(script.readyState)) {
-                    script.onreadystatechange = script.onload = null;
-                    //script.parentNode.removeChild(script);
-
-                    cb();
-                }
-            };
-
-            script.type = 'text/javascript';
-            //alert(script)
-            script.className = 'nouse';
-            s.appendChild(script);
-            script.src = src;
-            */
         }
 
 
@@ -355,14 +378,14 @@
                 "<i class='fa fa-reorder'></i><span class='stockname'></span>&nbsp&nbsp " +
                 "<small class='stockdata'></small></div>" +
 
-                "<div class='tools'> <a href='' class='expand portletarrow'></a> <a href='' class='remove'></a> </div> </div>" +
-                "<div class='portlet-body'> <div class='portlet'> <div class='row'> <div class='stock_flash_div'>" +
+                "<div class='tools'> <a href='' class='expand portletarrow'></a> <a href='' class='remove'></a> </div> <small style='clear:both;'></small></div>" +
+                "<div class='portlet-body'> <div class='portlet'> <div class='row stock_pan_row'> <div class='stock_flash_div'>" +
                 "<object type='application/x-shockwave-flash' data='http://i1.sinaimg.cn/cj/yw/flash/us0106wsa.swf' class='stock_flash'  >" +
                 "<param name='allowFullScreen' value='true'> <param name='allowScriptAccess' value='always'><param name='wmode' value='transparent'> <param name='freq' value='30'> <param name='flashvars' value='symbol=usr_"+id+"&amp;lastfive=50000'>" +
                 "</object> </div>" +
-                "<div class='stock_detail_div'> <div class='tabbable-custom '> <ul class='nav nav-tabs '> <li class='active'><a href='#tab_5_1' data-toggle='tab'>实时行情</a></li>  </ul>" +
+                "<div class='stock_detail_div'> <div class='tabbable-custom '> <ul class='nav nav-tabs '> <li class='active'><a href='#stock_pan_info_real_detail' data-toggle='tab'>实时行情</a></li>  </ul>" +
                 "<div class='tab-content'> " +
-                        "<div class='tab-pane active' id='tab_5_1'>" +
+                        "<div class='tab-pane active' id='stock_pan_info_real_detail'>" +
                         "<div class='hq_details' id='hqDetails'>"+
                             afterhour +
                             "<table  border='0' cellpadding='0' cellspacing='0'>"+
@@ -380,7 +403,7 @@
                                     "<tr> <th class='space_left'>贝塔系数：</th> <td>--</td> <th>股息/收益率：</th> <td>--/--</td> </tr>"+
                                 "</tbody>"+
                             "</table> </div> </div>"+
-                    "</div> </div> </div> </div> </div> </div> </div> </div> </div>";
+                    "</div> </div> </div> <small style='clear:both;'></small></div> </div> </div> </div> </div> </div>";
                     return content;
         }
         function getMultiEmptySockDetailPanel(ids) {
@@ -393,7 +416,7 @@
 
         // 获取右侧栏空股票模块
         function getEmptySockBlock(id) {
-            newblock = '<li data-id="'+id+'"class="sidebar_stock_block btn btn-block '+COLORS[2]+'">' +
+            newblock = '<li data-id="'+id+'"class="sidebar_stock_block btn  '+COLORS[2]+'">' +
             '<span class="stockname"></span> ' +
             '<small class="stockprice"></small>' +
             '<small class="stockrate"></small>' +
@@ -420,6 +443,7 @@
 
 
 
+
         // ----------------------------------股票查询框-------------------------------------------
         function idsInputRemoveOne(id) {
             ids = $("input[name='ids']").val();
@@ -435,6 +459,7 @@
             ids = $("input[name='ids']").val();
             $("input[name='ids']").val(id+","+ids);
         }
+        // 设置id列表
         ids = "<?php echo htmlspecialchars($ids);?>";
         $("input[name='ids']").val(ids);
 
@@ -447,7 +472,7 @@
         }
         function openAllStockPortlet() {
             $(".stockportlet").children(".portlet-body").slideDown(0);
-            $(".stockportlet .portletarrow").removeClass("collapse").addClass("expand");
+            $(".stockportlet .portletarrow").removeClass("collapse").addClass("exp  and");
         }
         function openOneStockPortlet(id) {
             $("#stock_content_"+id+" .portlet-body").slideDown(0);
@@ -482,6 +507,16 @@
 
 
         // -----------------------------------右侧边栏股票面板-----------------------------------------
+        // 股票详情列表
+        $("#stock_detail_table").colorbox({
+            iframe:true, 
+            innerWidth:1100, 
+            innerHeight:550, 
+            close:'关闭',
+            fixed:true,
+            scrolling:false
+        });
+
         // 搜索
         var suggestServer = new SuggestServer();
         suggestServer.bind({
@@ -501,6 +536,9 @@
         window.footTop = $('.footer').offset().top - parseFloat($('.footer').css('marginTop').replace(/auto/, 0));
 
         $(window).scroll(function(evt) {
+            // 右侧边距
+            window.sidebar_rightmargin = ($(window).width()-1283)/2;
+            if(window.sidebar_rightmargin<=0) window.sidebar_rightmargin = 0;
             var y = $(this).scrollTop();
             // 右侧栏悬浮
             if(y > $("body").height() - $("#sidebar").height()-42){
@@ -509,12 +547,14 @@
             if (y > sideTop) {
                 $('#sidebar').css({
                     position: 'fixed',
-                    top: '45px'
+                    top: '45px',
+                    right: window.sidebar_rightmargin
                 });
             } else {
                 $('#sidebar').css({
                     position: 'absolute',
-                    top: 0
+                    top: '20px',
+                    right: '0px'
                 });
             }
         });
@@ -542,10 +582,9 @@
             var stock = fa.find("input").val().toLowerCase();
             var stockcode = "gb_"+stock;
             has = true;
-            jsonp("http://hq.sinajs.cn/?list="+stockcode, function(){
+            RemoteApi.jsapiCrossDomain("http://hq.sinajs.cn/?list="+stockcode, function(){
                 // 检测是否存在
-                stockInfo = splitSinaStockInfo(stock);
-                //console.log(stock,stockInfo);
+                stockInfo = RemoteApi.getSinaStockDetail(stock);
                 if(!stockInfo) has=false;
                 if(!has) {
                     return;
@@ -564,7 +603,7 @@
                     // 插入股票详情板块
                     newblock =getEmptySockDetailPanel(stock);
                     DEFAULT_STOCKPAN = newblock + DEFAULT_STOCKPAN
-                    $("#stock_pan").prepend(newblock);
+                    $("#stock_pan").find("#stock_content_inx").after(newblock);
                     // 去除输入
                     fa.find("input").val("");
                     // 刷新股票信息
@@ -637,7 +676,7 @@
                 });
                 // 插入右侧栏
                 content = getMultiEmptySockBlock(stockarray);
-                $("#sidebar ul").html(content);
+                $("#sidebar #sortable").html(content);
                 // 插入股票详情
                 content = getMultiEmptySockDetailPanel(stockarray);
                 //$("#stock_pan").html(content);
@@ -649,17 +688,17 @@
                 });
                 // 插入右侧栏
                 content = getMultiEmptySockBlock(stockarray);
-                $("#sidebar ul").html(content);
+                $("#sidebar #sortable").html(content);
                 // 插入股票详情
                 content = getMultiEmptySockDetailPanel(stockarray);
                 //$("#stock_pan").html(content);
             } else {
                 $(this).html("<i class='iconfont sort_btn_img_left'>&#983407;</i><i class='iconfont sort_btn_img_right'>&#983408;</i>");
                 $(this).data("sort","no")
-                $("#sidebar ul").html(DEFAULT_STOCKBLOCK);
+                $("#sidebar #sortable").html(DEFAULT_STOCKBLOCK);
                 //$("#stock_pan").html(DEFAULT_STOCKPAN);
             }
-            getStockInfo();
+            getStockInfo(); // 刷新股票信息
         });
 
 
@@ -667,10 +706,30 @@
 
         // ------------------------------------定时器---------------------------------
         // 获取股票信息并更新页面
+        function freshDetail(id) {
+            $("#stock_content_"+id+" .after_hour_content").html(formateAmount(stockInfo.after_hour_price)+'&nbsp&nbsp'+stockInfo.after_hour_price_change_amount+'&nbsp&nbsp('+formateAmount(stockInfo.after_hour_price_change_rate)+'%)');
+            if(stockInfo.after_hour_price_change_rate>0) $("#stock_content_"+id+" .after_hour_content").css('color','red')
+            if(stockInfo.after_hour_price_change_rate<0) $("#stock_content_"+id+" .after_hour_content").css('color','green')
+            //console.log(formateAmount(stockInfo.start_price));
+            content = stockInfo.real_price+'&nbsp&nbsp'+stockInfo.real_price_change_amount+'&nbsp&nbsp('+stockInfo.real_price_change_rate+'%)';
+            $("#stock_content_"+id+" small.stockdata").html(content);
+            $("#stock_content_"+id+" span.stockname").html(stockInfo.name+"("+id+")");
+            freshStockColor($("#stock_content_"+id+" .stockportlet"),stockInfo);
+            $("#stock_content_"+id+" .detail_market_cap").html(formateAmount(stockInfo.market_cap));
+            $("#stock_content_"+id+" .detail_price_interval").html(formateAmount(stockInfo.lowerprice_today)+"-"+formateAmount(stockInfo.highprice_today));
+            $("#stock_content_"+id+" .detail_start_price").html(formateAmount(stockInfo.start_price));
+            $("#stock_content_"+id+" .detail_real_share_amout").html(formateAmount(stockInfo.real_share_amount));
+            $("#stock_content_"+id+" .detail_yesterday_close_price").html(formateAmount(stockInfo.yesterday_close_price));
+            $("#stock_content_"+id+" .detail_pe").html(formateAmount(stockInfo.PE));
+            $("#stock_content_"+id+" .detail_stock_amount_10day").html(formateAmount(stockInfo.stock_amount_10day));
+            $("#stock_content_"+id+" .detail_price_interval_52week").html(formateAmount(stockInfo.lowerprice_52week)+"-"+formateAmount(stockInfo.highprice_52week));
+            $("#stock_content_"+id+" .detail_earning_per_share").html(formateAmount(stockInfo.earning_per_share));
+            $("#stock_content_"+id+" .detail_capitalization").html(formateAmount(stockInfo.capitalization));
+        }
         stockinfo_lock = false;
         function getStockInfo() {
             //return 
-            // 盘前价格
+            // 显示盘前价格
             if(isOpen()) $(".after_hour_info").css('display','none');
             else $(".after_hour_info").css('display','block');
             
@@ -680,15 +739,17 @@
             $("#sidebar #sortable li").each(function(index) {
                 getparams += "gb_"+$(this).data("id")+",";
             });
+            getparams += "gb_"+$(this).data("id")+",gb_dji,gb_ixic,gb_inx";
             if(getparams.length==0) {
                 stockinfo_lock=false;
                 return;
             }
             // 获取sina股票信息
-            jsonp("http://hq.sinajs.cn/?list="+getparams, function(){
-                $("#sidebar #sortable li").each(function() {
+            RemoteApi.jsapiCrossDomain("http://hq.sinajs.cn/?list="+getparams, function(){
+                // 更新market信息
+                $("#sidebar #market_sortable li").each(function() {
                     id = $(this).data("id")
-                    stockInfo = splitSinaStockInfo(id);
+                    stockInfo = RemoteApi.getSinaStockDetail(id);
                     // 右侧栏
                     $(this).find("small.stockprice").html(stockInfo.real_price);
                     $(this).find("small.stockrate").html("("+stockInfo.real_price_change_rate+"%)");
@@ -696,25 +757,23 @@
                     freshStockColor($(this),stockInfo);
 
                     // 股票详情板块
-                    $("#stock_content_"+id+" .after_hour_content").html(formateAmount(stockInfo.after_hour_price)+'&nbsp&nbsp'+stockInfo.after_hour_price_change_amount+'&nbsp&nbsp('+formateAmount(stockInfo.after_hour_price_change_rate)+'%)');
-                    if(stockInfo.after_hour_price_change_rate>0) $("#stock_content_"+id+" .after_hour_content").css('color','red')
-                    if(stockInfo.after_hour_price_change_rate<0) $("#stock_content_"+id+" .after_hour_content").css('color','green')
-                    //console.log(formateAmount(stockInfo.start_price));
-                    content = stockInfo.real_price+'&nbsp&nbsp'+stockInfo.real_price_change_amount+'&nbsp&nbsp('+stockInfo.real_price_change_rate+'%)';
-                    $("#stock_content_"+id+" small.stockdata").html(content);
-                    $("#stock_content_"+id+" span.stockname").html(stockInfo.name+"("+id+")");
-                    freshStockColor($("#stock_content_"+id+" .stockportlet"),stockInfo);
-                    $("#stock_content_"+id+" .detail_market_cap").html(formateAmount(stockInfo.market_cap));
-                    $("#stock_content_"+id+" .detail_price_interval").html(formateAmount(stockInfo.lowerprice_today)+"-"+formateAmount(stockInfo.highprice_today));
-                    $("#stock_content_"+id+" .detail_start_price").html(formateAmount(stockInfo.start_price));
-                    $("#stock_content_"+id+" .detail_real_share_amout").html(formateAmount(stockInfo.real_share_amount));
-                    $("#stock_content_"+id+" .detail_yesterday_close_price").html(formateAmount(stockInfo.yesterday_close_price));
-                    $("#stock_content_"+id+" .detail_pe").html(formateAmount(stockInfo.PE));
-                    $("#stock_content_"+id+" .detail_stock_amount_10day").html(formateAmount(stockInfo.stock_amount_10day));
-                    $("#stock_content_"+id+" .detail_price_interval_52week").html(formateAmount(stockInfo.lowerprice_52week)+"-"+formateAmount(stockInfo.highprice_52week));
-                    $("#stock_content_"+id+" .detail_earning_per_share").html(formateAmount(stockInfo.earning_per_share));
-                    $("#stock_content_"+id+" .detail_capitalization").html(formateAmount(stockInfo.capitalization));
                     //console.log(stockInfo);
+                    freshDetail(id);
+                });
+
+                // 更新个股信息
+                $("#sidebar #sortable li").each(function() {
+                    id = $(this).data("id")
+                    stockInfo = RemoteApi.getSinaStockDetail(id);
+                    // 右侧栏
+                    $(this).find("small.stockprice").html(stockInfo.real_price);
+                    $(this).find("small.stockrate").html("("+stockInfo.real_price_change_rate+"%)");
+                    $(this).find("span.stockname").html(stockInfo.name);
+                    freshStockColor($(this),stockInfo);
+
+                    // 股票详情板块
+                    //console.log(stockInfo);
+                    freshDetail(id);
                 });
             })
             stockinfo_lock=false;

@@ -14,10 +14,12 @@ class UserController extends BackController
         -4=>'密码错误',
         -5=>'邮箱不能为空',
         -6=>'用户已存在',
+        -7=>'验证码错误',
     );
     public function actionInitSystem()
     {
         //todo 增加权限限制
+        exit;
         InitSystem::initActions();
         InitSystem::initSupperUser('superman','superman');
         InitSystem::initRoles();
@@ -183,6 +185,13 @@ class UserController extends BackController
 
         //var_dump($account);//exit;
         //if (!$this->validateAccount($account)) {
+
+        include_once Yii::app()->basePath . '/../securimage/securimage.php';
+        $securimage = new Securimage();
+        if ($securimage->check($_REQUEST['captcha_code']) == false) {
+            $accountError = '验证码错误';
+            $this->jsonResult(-7, array('info' => $accountError));
+        }
         if (empty($account)) {
             $accountError = '用户名不能为空';
             $this->jsonResult(-3, array('info' => $accountError));

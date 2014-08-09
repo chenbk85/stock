@@ -148,6 +148,9 @@ var Login = function () {
 	                    required: true,
 	                    email: true
 	                },
+	                captcha_code: {
+	                    required: true
+	                },
 	                tnc: {
 	                    required: true
 	                }
@@ -166,6 +169,9 @@ var Login = function () {
 	                email: {
 	                    required: "请填入邮箱",
 	                    email: "请填入正确邮箱"
+	                },
+	                captcha_code: {
+	                    required: "请填入验证码"
 	                },
 	                tnc: {
 	                    required: "请接受服务条款."
@@ -205,7 +211,11 @@ var Login = function () {
 					        //console.log(result);
 					        if(result.retCode==0) {
 					        	location.href='/stock/whole';
-					        //	console.log(location.href);
+					        } else {
+					        	// error
+					        	console.log(result.msg);
+					        	$("#reg_error_tip_info").html(result.msg);
+					        	$("#reg_error_tip").show();
 					        }
 					    }
 	                });

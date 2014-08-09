@@ -14,7 +14,7 @@ class Action extends MActiveRecord
 
     public function getAllMenu()
     {
-        $sql = "select * from `m-action` where is_menu>=1";
+        $sql = "select * from `m-action` where is_menu>=1 order by menusort asc";
         $conn = Yii::app()->db_frame;
         $command = $conn->createCommand($sql);
         $rows = $command->queryAll();

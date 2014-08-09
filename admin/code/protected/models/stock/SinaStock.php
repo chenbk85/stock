@@ -12,6 +12,12 @@ class SinaStock
 
 	}
 
+	public function getMarketPriceDetail()
+	{
+		$in = array('dji','ixic','inx');
+		return $this->getRealPriceDetail($in);
+	}
+
 /*
 
 var hq_str_gb_qihu="
@@ -59,8 +65,13 @@ Mar 06 04:03PM EST（26盘后最终交易时间）,
 			$id = strtolower($mathchs[1]);
 			$seg2 = explode(",",$mathchs[2]);
 			if(count($seg2)<20) continue;
+
 			//echo "<pre>";var_dump($seg2);continue;
+			$panelid = "gb_".$id;
+			if(in_array($id, array('dji','ixic','inx'))) $panelid = 'gb_.'.$id;
 			$priceDetails[$id] = array(
+				'hq_sinajs_cn_id' => "gb_".$id, // sina实时报价接口输入id
+				'panel_id' => $panelid, // sina曲线图数据输入id
 				'lower_id' => $id,
 				'upper_id' => strtoupper($id),
 				'name' => $seg2[0],

@@ -115,7 +115,10 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
 		<!-- BEGIN REGISTRATION FORM -->
 		<form class="register-form" action="" method="post">
 			<h3 >注册</h3>
-			<span id="errortip" for="" class="help-block alert-danger">asdf</span>
+			<div id="reg_error_tip" class="alert alert-danger" style="display:none;">
+				<button class="close" data-close="alert"></button>
+				<span id="reg_error_tip_info"></span>
+			</div>
 			<div class="form-group">
 				<label class="control-label visible-ie8 visible-ie9">用户名</label>
 				<div class="input-icon">
@@ -147,6 +150,11 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
 					<i class="fa fa-envelope"></i>
 					<input class="form-control placeholder-no-fix" type="text" id="regemail" autocomplete="on" placeholder="邮箱" name="email"/>
 				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label visible-ie8 visible-ie9">验证码</label>
+				<input type="text" name="captcha_code" size="10" maxlength="6" placeholder="验证码" />
+				<a href="#" onclick="document.getElementById('captcha').src = '/securimage/securimage_show.php?' + Math.random(); return false">换一换<img style="width:40%" id="captcha" src="/securimage/securimage_show.php" alt="CAPTCHA Image" /></a>
 			</div>
 			<div class="form-group">
 				<label>
@@ -206,7 +214,7 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
 	<!-- END LOGIN -->
 	<!-- BEGIN COPYRIGHT -->
 	<div class="copyright">
-		2014 &copy; Back Admin by hucong.
+		2014 &copy;  by 美股时代.
 	</div>
 	<!-- END COPYRIGHT -->
 	<!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->

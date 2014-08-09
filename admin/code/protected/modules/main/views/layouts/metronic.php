@@ -48,7 +48,7 @@
 <body  class="page-header-fixed <?php if(Yii::app()->params['horizontal_menu_layout'])  echo 'page-full-width';?>">
 <div class="">
   <!-- BEGIN HEADER -->
-  <div class=" header navbar navbar-inverse navbar-fixed-top">
+  <div class="color_header header navbar navbar-inverse navbar-fixed-top">
     <div class="stock_body_center">
       <!-- BEGIN TOP NAVIGATION BAR -->
       <div class="header-inner">
@@ -107,12 +107,17 @@
       <!-- END SIDEBAR -->
       
       <!-- BEGIN PAGE -->
-      <div class="page-content">
+      <div class="page-content" style='padding:5px 5px'>
           <!-- BEGIN PAGE HEADER-->
-          <div class="row">
+          <div class="row color_page_title">
             <div class="col-md-12">
-              <!-- BEGIN PAGE TITLE & BREADCRUMB-->   
-              <?php $this->widget('application.modules.main.widgets.PageTitleMetro', array('userid' => $this->userid)); ?>
+              <div class="contact_content">
+                <span class="contact_icon contact_group_bg"></span>
+                <ul>
+                  <li class="contact_text">QQ群:<a id="" style="color:#1fa4c7" target="_blank" href="">254233419</a></li>
+                </ul>
+              </div>
+            <!-- BEGIN PAGE TITLE & BREADCRUMB-->   
               <!-- END PAGE TITLE & BREADCRUMB--> 
             </div>
           </div>
@@ -133,7 +138,7 @@
   <div class="footer">
     <div class="stock_body_center">
       <div class="footer-inner">
-          2014 &copy; 美股时代 by 胡户主.
+          2014 &copy; 美股时代.
       </div>
       <div class="footer-tools">
           <span class="go-top">
@@ -143,6 +148,11 @@
     </div>
   </div>
   <!-- END FOOTER -->
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F056c0d45e91cbb7137d76448d034d80f' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
 
 
 
@@ -195,6 +205,7 @@
        });
     </script>
     <!-- END JAVASCRIPTS -->
+
 </div>
 </body>
 </html>

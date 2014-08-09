@@ -38,16 +38,17 @@ class Privilege
     static public function getMenu($uid)
     {
         $userInst = new User;
-        $userInfo = $userInst->getUserWithAction('uid=:id order by menu_pos,aname ',array(':id'=>$uid));
+        $userInfo = $userInst->getUserWithAction('uid=:id order by menusort,aname ',array(':id'=>$uid));
         $ret = array();
         foreach($userInfo as $k=>$v) {
             if($v['is_menu']) {
                 $ret[] = array(
-                    'aid' => $v['aid'],
-                    'aname' => $v['aname'],
-                    'route' => $v['route'],
-                    'is_menu' => $v['is_menu'],
+                    'aid'        => $v['aid'],
+                    'aname'      => $v['aname'],
+                    'route'      => $v['route'],
+                    'is_menu'    => $v['is_menu'],
                     'first_menu' => $v['first_menu'],
+                    'menusort'   => $v['menusort'],
                 );
             }
         }

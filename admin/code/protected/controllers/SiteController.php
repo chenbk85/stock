@@ -1,8 +1,7 @@
 <?php
 
-class SiteController extends Controller
+class SiteController extends BackController
 {
-    public $layout = '';//"application.modules.main.views.layouts.frame_without_leftnav";
 
     /**
      * This is the default 'index' action that is invoked
@@ -10,6 +9,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        $this->layout = '';
         //var_dump("asfd");exit;
         $userInfo = Login::getLoginInfo();
         $roleInfo = Role::model()->find('rid=:id',array(':id'=>$userInfo['rid']));
@@ -36,6 +36,7 @@ class SiteController extends Controller
      */
     public function actionError()
     {
+        $this->layout = '';
         if($error=Yii::app()->errorHandler->error)
         {
             if(Yii::app()->request->isAjaxRequest)
@@ -47,7 +48,43 @@ class SiteController extends Controller
 
 	public function actionVideo()
 	{
+        $this->layout = '';
 		$this->render("video");
 	}
+
+    // feedback index
+    public function actionFeedback()
+    {
+        $feeds = Feedback::model()->findAll("1=1 order by ctime desc limit 5");
+        $this->render("feedback",array('feeds'=>$feeds));
+    }
+
+    // json save
+    public function actionSaveFeedback()
+    {
+        if(empty($_REQUEST['nickname'])||empty($_REQUEST['content'])||empty($_REQUEST['email'])) {
+            exit;
+        }
+        $feedback = new Feedback;
+        $feedback->uid     = $this->userid;
+        $feedback->name    = $_REQUEST['nickname'];
+        $feedback->email   = $_REQUEST['email'];
+        $feedback->message = $_REQUEST['content'];
+        $ret = $feedback->save();
+        if($ret===true) $this->jsonOut(0,"ok");
+        else $this->jsonOut(1,"db error");
+    }
+
+    public function actionGetFeedback()
+    {
+        $page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 1;
+        $num = 5;
+
+        $start = $page*$num+1;
+        $feeds = Feedback::model()->findAll("1=1 order by ctime desc limit {$start},$num");
+        $ret = Util::models2Arr($feeds);
+        if($ret===false) $this->jsonOut(1,"db error");
+        else $this->jsonOut(0,"ok",$ret);
+    }
 
 }

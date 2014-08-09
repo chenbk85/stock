@@ -59,7 +59,7 @@ class User extends MActiveRecord
     {
         if(!empty($condition)) {
             $sql = "
-                SELECT u.*,a.aid,a.aname,a.route,a.is_menu,a.first_menu  
+                SELECT u.*,a.aid,a.aname,a.route,a.is_menu,a.first_menu,a.menusort  
                 FROM `m-user` u 
                 INNER JOIN `m-role-action` ra ON u.rid=ra.rid
                 INNER JOIN `m-action` a ON ra.aid=a.aid
@@ -67,7 +67,7 @@ class User extends MActiveRecord
             ";
         } else {
             $sql = "
-                SELECT u.*,a.aid,a.aname,a.route,a.is_menu,a.first_menu 
+                SELECT u.*,a.aid,a.aname,a.route,a.is_menu,a.first_menu,a.menusort 
                 FROM `m-user` u 
                 INNER JOIN `m-role-action` ra ON u.rid=ra.rid
                 INNER JOIN `m-action` a ON ra.aid=a.aid

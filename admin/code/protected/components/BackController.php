@@ -18,6 +18,16 @@ class BackController extends Controller
     // 页面title
     public $actionName=0;
 
+    protected function jsonOut($code,$msg,$data=array())
+    {
+        echo json_encode(array(
+            'code' => $code,
+            'msg'  => $msg,
+            'data' => $data,
+        ));
+        exit;
+    }
+
 
     protected function beforeAction($action)
     {
@@ -51,6 +61,7 @@ class BackController extends Controller
             || preg_match('|^/main/user/register|',$_SERVER['REQUEST_URI'])
             || preg_match('|^/site/index|',$_SERVER['REQUEST_URI']) 
             || $requestUrl=='/site/error'
+            || $requestUrl=='/'
             //|| $requestUrl=='/main/user/initsystem'
         )) 
         {
