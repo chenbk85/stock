@@ -1,0 +1,22 @@
+/*-----------Feedback---------------*/
+
+#feedback_main {width:700px;margin:0 auto;}
+#feedback_panel {
+	border: 2px solid #995555;
+	height: 500px;
+	padding: 10px;
+	position: relative;
+	overflow-y: auto;
+	-webkit-overflow-scrolling: touch;
+}
+::-webkit-scrollbar {
+  width: 8px; }
+
+::-webkit-scrollbar-thumb {
+  background: #995555;
+  background: rgba(155, 86, 86, 0.15);
+  border-radius: 5px; }
+
+::-webkit-scrollbar-track {
+  background: #995555;
+  background: rgba(155, 86, 86, 0.05); }
