@@ -151,7 +151,6 @@ class UserController extends BackController
             // 兼容老的情况
             if(empty($loginUserInfo))
                 $loginUserInfo = Login::logins($_REQUEST['name'],$_REQUEST['pwd'],'mingwen');
-            //echo "<pre>";var_dump($loginUserInfo);exit;
             if (!empty($loginUserInfo))
             {
                 if (!empty($url) && $url != '/')

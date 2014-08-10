@@ -4,7 +4,7 @@
 	<div class="col-md-12">
 		<div class="post-comment margin-bottom-15">
 			<h3>欢快地吐槽：</h3>
-			<form id="msgform" role="form" >
+			<form id="msgform" role="form" action="/site/feedback" method="post">
 				<div class="form-group">
 					<label class="control-label">昵称<span class="required">*</span></label>
 					<input name="nickname" type="text" class="form-control">
@@ -122,21 +122,7 @@ jQuery(document).ready(function() {
 	    },
 
 	    submitHandler: function (form) {
-    	    $(form).ajaxSubmit({
-        		type: "get",
-        		url: "/site/saveFeedback",
-        		dataType: "json",
-        		success: function(result){
-			        //返回提示信息       
-			        if(result.code==0) {
-			        	//location.href='/stock/whole';
-			        //	console.log(location.href);
-			        	//$(form).clearForm();
-			        	//App.scrollTo();
-			        }
-			    }
-            });
-            //return false;
+            form.submit();
 	    }
 	});
 });

@@ -54,8 +54,17 @@ class SiteController extends BackController
 
     // feedback index
     public function actionFeedback()
-    {
+    {        
+        if(!empty($_REQUEST['nickname'])&&!empty($_REQUEST['content'])&&!empty($_REQUEST['email'])) {
+            $feedback = new Feedback;
+            $feedback->uid     = $this->userid;
+            $feedback->name    = $_REQUEST['nickname'];
+            $feedback->email   = $_REQUEST['email'];
+            $feedback->message = $_REQUEST['content'];
+            $ret = $feedback->save();
+        }
         $feeds = Feedback::model()->findAll("1=1 order by ctime desc limit 5");
+
         $this->render("feedback",array('feeds'=>$feeds));
     }
 
