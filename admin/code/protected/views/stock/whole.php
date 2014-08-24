@@ -464,7 +464,7 @@
         $("input[name='ids']").val(ids);
 
 
-        // ---------------------------------右侧栏股票板块控制-------------------------------
+        // ---------------------------------左侧栏股票板块控制-------------------------------
         function closeAllStockPortlet() {
             App.scrollTo(); // scroll to top
             $(".stockportlet").children(".portlet-body").slideUp(0);
@@ -498,12 +498,15 @@
             e.preventDefault();
         });
 
+        /*
+        // 点击展开时间
         $("#stock_pan").delegate(".portlet-title","click",function() {
             id = $(this).data("id");
             isopen = $("#stock_content_"+id+" .portletarrow").hasClass("expand");
             if(!isopen) openOneStockPortlet(id);
             else closeOneStockPortlet(id);
         });
+        */
 
 
         // -----------------------------------右侧边栏股票面板-----------------------------------------
