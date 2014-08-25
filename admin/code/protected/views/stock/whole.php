@@ -30,12 +30,20 @@
 		<div class="caption">
             <i class="fa fa-reorder"></i>
             <span class="stockname"><?php echo htmlspecialchars($v['name']);?>(<?php echo htmlspecialchars(($id));?>)</span>&nbsp&nbsp
-            <small class='stockdata'><?php echo htmlspecialchars($v['real_price'])."&nbsp&nbsp".htmlspecialchars($v['real_price_change_amount'])."&nbsp&nbsp(".htmlspecialchars($v['real_price_change_rate'])."%)";?> </small>
+            <small class='stockdata'><?php echo htmlspecialchars($v['real_price'])."&nbsp&nbsp".htmlspecialchars($v['real_price_change_amount'])."&nbsp&nbsp(".htmlspecialchars($v['real_price_change_rate'])."%)";?></small>
         </div>
 		<div class="tools">
-			<a href="" class="expand portletarrow"></a>
+        <!--self or -->
             <?php if($cate=='self') { ?>
-			<a href="" class="remove"></a>
+                <a target="_blank" href="http://stock.finance.sina.com.cn/usstock/quotes/<?php echo htmlspecialchars($id);?>.html"><img class="sitelogo_panel" src="http://i1.sinaimg.cn/cj/deco/2014/0319/img/logo.png" style="" /></a>
+                <a class="qqstocklink" target="_blank" href="http://stockhtm.finance.qq.com/astock/ggcx/<?php echo htmlspecialchars($v['upper_id']);?>.QQ.htm"><img class="sitelogo_panel" src="http://mat1.gtimg.com/finance/financeNav0531/logo.png" style="" /></a>
+            <?php } else { ?>
+                <a target="_blank" href="http://stock.finance.sina.com.cn/usstock/quotes/.<?php echo htmlspecialchars($id);?>.html"><img class="sitelogo_panel" src="http://i1.sinaimg.cn/cj/deco/2014/0319/img/logo.png" style="" /></a>
+                <a target="_blank" href="http://stockhtm.finance.qq.com/astock/ggcx/<?php echo htmlspecialchars($v['upper_id']);?>.htm"><img class="sitelogo_panel" src="http://mat1.gtimg.com/finance/financeNav0531/logo.png" style="" /><!--<img class="sitelogo_panel" src="http://mat1.gtimg.com/finance/financeNav0531/name02.png">--></a>
+            <?php }?>
+    	    <a href="" class="expand portletarrow"></a>
+            <?php if($cate=='self') { ?>
+                <a href="" class="remove"></a>
             <?php }?>
 		</div>
         <small style="clear:both;"></small>
@@ -283,14 +291,25 @@
     </div>
 </div>
 
+<script src="/widgit/pace/pace.min.js"></script>
+<link href="/widgit/pace/pace.css" rel="stylesheet" />
 <!--<script src="http://vip.stock.finance.sina.com.cn/usstock/fusioncharts/Code/FusionCharts/FusionCharts.js" type="text/javascript"></script>-->   
 <script type="text/javascript" src="/js/suggestFromSina.js"></script>
 <script type="text/javascript" src="/js/remoteApi.js" ></script>
 <link href="/colorbox/colorbox.css" rel="stylesheet" media="screen" type="text/css" />
 <script type="text/javascript" src="/colorbox/jquery.colorbox.js" ></script>
-<script type="text/javascript"> 
 
+<script type="text/javascript"> 
+paceOptions = {
+    ajax: false, // disabled
+    document: true, // disabled
+    eventLag: false, // disabled
+    elements: {
+        //selectors: ['.tmp']
+    }
+};
     jQuery(document).ready(function() {    
+
         // common
         // 股票查询串cookie
         function saveUserQueryCookie() {
@@ -378,7 +397,10 @@
                 "<i class='fa fa-reorder'></i><span class='stockname'></span>&nbsp&nbsp " +
                 "<small class='stockdata'></small></div>" +
 
-                "<div class='tools'> <a href='' class='expand portletarrow'></a> <a href='' class='remove'></a> </div> <small style='clear:both;'></small></div>" +
+                "<div class='tools'>"+
+                '<a target="_blank" href="http://stock.finance.sina.com.cn/usstock/quotes/'+id+'.html"><img class="sitelogo_panel" src="http://i1.sinaimg.cn/cj/deco/2014/0319/img/logo.png" style="" /></a>'+
+                '<a class="qqstocklink" target="_blank" href="http://stockhtm.finance.qq.com/astock/ggcx/'+id.toUpperCase()+'.QQ.htm"><img class="sitelogo_panel" src="http://mat1.gtimg.com/finance/financeNav0531/logo.png" style="" /></a>'+
+                " <a href='' class='expand portletarrow'></a> <a href='' class='remove'></a> </div> <small style='clear:both;'></small></div>" +
                 "<div class='portlet-body'> <div class='portlet'> <div class='row stock_pan_row'> <div class='stock_flash_div'>" +
                 "<object type='application/x-shockwave-flash' data='http://i1.sinaimg.cn/cj/yw/flash/us0106wsa.swf' class='stock_flash'  >" +
                 "<param name='allowFullScreen' value='true'> <param name='allowScriptAccess' value='always'><param name='wmode' value='transparent'> <param name='freq' value='30'> <param name='flashvars' value='symbol=usr_"+id+"&amp;lastfive=50000'>" +

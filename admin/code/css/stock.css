@@ -12,6 +12,7 @@
 }
 
 
+
 /**************自己的样式*******************/
 /*common*/
 @font-face {font-family: 'iconfont';
@@ -81,6 +82,9 @@ body {
 
 /*-----------自选股---------------*/
 
+/* color */
+.stockred { background-color:#A8373C; }
+.stockgreen { background-color:#419154; }
 
 .stocksearch {
 	margin:0 auto;
@@ -179,8 +183,11 @@ body {
 	white-space:nowrap;
 }
 #stock_pan .stockdata{
-	margin-top: 4px;
 	width:150px;
+}
+.sitelogo_panel {
+	margin-top: -14px;
+	height: 18px;
 }
 
 /*股票flash显示*/

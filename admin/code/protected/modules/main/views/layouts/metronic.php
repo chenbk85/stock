@@ -54,7 +54,7 @@
       <div class="header-inner">
         <!-- BEGIN LOGO -->  
         <a class="navbar-brand" href="/site/index">
-        <img src="/images/stocktool_logo4.png" alt="logo" clas="img-responsive" style="margin-top:-14px"/>
+        <img src="/images/stocktool_logo4.png" alt="logo" class="img-responsive" style="margin-top:-14px"/>
         </a>
         <!-- 横向菜单-->
         <?php if(Yii::app()->params['horizontal_menu_layout']) { ?>
@@ -105,22 +105,26 @@
       </div>
       <?php } ?>
       <!-- END SIDEBAR -->
-      
+
+      <!-- BEGIN PAGE HEADER-->
+      <div class="row color_page_title">
+        <div class="col-md-12">
+          <div class="contact_content">
+            <span class="contact_icon contact_group_bg"></span>
+            <ul>
+              <li class="contact_text">QQ群:<a id="" style="color:#1fa4c7" target="_blank" href="">254233419</a></li>
+            </ul>
+          </div>
+        <!-- BEGIN PAGE TITLE & BREADCRUMB-->   
+          <!-- END PAGE TITLE & BREADCRUMB--> 
+        </div>
+      </div> 
+      <!-- END PAGE HEADER-->
+
       <!-- BEGIN PAGE -->
       <div class="page-content" style='padding:5px 5px'>
           <!-- BEGIN PAGE HEADER-->
-          <div class="row color_page_title">
-            <div class="col-md-12">
-              <div class="contact_content">
-                <span class="contact_icon contact_group_bg"></span>
-                <ul>
-                  <li class="contact_text">QQ群:<a id="" style="color:#1fa4c7" target="_blank" href="">254233419</a></li>
-                </ul>
-              </div>
-            <!-- BEGIN PAGE TITLE & BREADCRUMB-->   
-              <!-- END PAGE TITLE & BREADCRUMB--> 
-            </div>
-          </div>
+
           <!-- END PAGE HEADER-->
 
           <div class="row">
